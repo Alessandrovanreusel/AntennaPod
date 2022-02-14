@@ -935,4 +935,9 @@ public final class DBReader {
         adapter.close();
         return result;
     }
+    
+    public static int addition(int a, int b){
+        // function that returns int value for a + b
+        return a + b;
+    }
 }

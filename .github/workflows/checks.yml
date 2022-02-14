@@ -33,32 +33,6 @@ jobs:
           git diff --name-only ${{ steps.vars.outputs.branchBaseCommit }} --diff-filter=AM | { grep "res/layout/" || true; } | xargs java -jar android-xml-formatter.jar
           test $(git diff | wc -l) -eq 0 || (echo -e "\n\n===== Found XML code style violations! See output below how to fix them. =====\n\n" && git --no-pager diff --color=always && false)
 
-  wrapper-validation:
-    name: "Gradle Wrapper Validation"
-    needs: code-style
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: gradle/wrapper-validation-action@v1
-
-  static-analysis:
-    name: "Static Code Analysis"
-    needs: code-style
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Cache Gradle
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: gradle-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
-      - name: Lint
-        run: ./gradlew lintPlayRelease lintRelease
-      - name: SpotBugs
-        run: ./gradlew spotbugsPlayDebug spotbugsDebug 2>&1 | grep -i "spotbugs"
-
   unit-test:
     name: "Unit Test: ${{ matrix.variant }}"
     needs: code-style

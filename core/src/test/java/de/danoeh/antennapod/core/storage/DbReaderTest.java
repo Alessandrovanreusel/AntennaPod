@@ -327,6 +327,13 @@ public class DbReaderTest {
         assertEquals(0, navDrawerData.numNewItems);
         assertEquals(0, navDrawerData.queueSize);
     }
+    
+    @Test
+    public void testAddedFunction() {
+        final int testResult = 3;
+        int functionResult = DBReader.addition(1,2);
+        assertEquals(testResult, functionResult);
+    }
 
     @Test
     public void testGetNavDrawerDataQueueNotEmptyWithUnreadItems() {
